@@ -6,15 +6,15 @@ import random
 def binary_search(arr, value, start, end):
     left = start
     right = end
-    while left != right:
+    last = start
+    while left < right:
         mid = (left + right) // 2
-        if value >= arr.get(mid):
-            return mid
         if value < arr.get(mid):
-            right = mid + 1
-        elif value > arr.get(mid):
-            left = mid - 1
-    return None
+            right = mid - 1
+        elif value >= arr.get(mid):
+            left = mid + 1
+            last = mid
+    return last
 
 
 def insert_sort(arr, start, end):
@@ -68,7 +68,6 @@ def merge(arr, start, mid, end):
                     arr.set(k, right.get(j))
                     k += 1
                 j += 1
-
         if i < left.size and j < right.size:
             if left.get(i) <= right.get(j):
                 arr.set(k, left.get(i))
