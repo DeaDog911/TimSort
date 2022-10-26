@@ -1,6 +1,8 @@
-from array_list import ArrayList
-from stack import Stack
 import random
+import time
+from array_list import ArrayList
+from sorting import merge_sort, insert_sort
+from stack import Stack
 
 
 def binary_search(arr, value, start, end):
@@ -15,16 +17,6 @@ def binary_search(arr, value, start, end):
             left = mid + 1
             last = mid
     return last
-
-
-def insert_sort(arr, start, end):
-    for i in range(start + 1, end + 1):
-        value = arr.get(i)
-        j = i - 1
-        while j >= start and arr.get(j) > value:
-            arr.set(j+1, arr.get(j))
-            arr.set(j, value)
-            j -= 1
 
 
 def merge(arr, start, mid, end):
@@ -169,7 +161,6 @@ def find_runs(arr, minrun, runs_stack):
 def timsort(arr: ArrayList):
     N = arr.size
     minrun = get_minrun(N)
-    print("minrun:", minrun)
     runs_stack = Stack()
     find_runs(arr, minrun, runs_stack)
     while merge_runs(arr, runs_stack, 1):
@@ -177,16 +168,32 @@ def timsort(arr: ArrayList):
 
 
 if __name__ == '__main__':
-    for N in range(100, 10000, 150):
-        print("N: ", N)
-        arr = ArrayList(N)
-        arr1 = ArrayList(N)
-        for i in range(N):
-            intgr = random.randint(1, 100)
-            arr.add(intgr)
-            arr1.add(intgr)
-        timsort(arr)
-        arr.print()
-        arr1.sort()
-        arr1.print()
-        assert arr1.array == arr.array, True
+    N = 1000
+    arr = ArrayList(N)
+    arr1 = ArrayList(N)
+    arr2 = ArrayList(N)
+    for i in range(N):
+        rand_int = random.randint(1, 100)
+        arr.add(rand_int)
+        arr1.add(rand_int)
+        arr2.add(rand_int)
+    arr.print()
+    timsort_start = time.time()
+    timsort(arr)
+    timsort_end = time.time()
+    arr.print()
+
+    ins_start = time.time()
+    insert_sort(arr1, 0, arr1.size-1)
+    ins_end = time.time()
+
+    merge_start = time.time()
+    merge_sort(arr2, 0, arr2.size-1)
+    merge_end = time.time()
+
+    print("Timsort: ", (timsort_end - timsort_start) * 1000)
+    print("Insertion sort: ", (ins_end - ins_start) * 1000)
+    print("Merge sort: ", (merge_end - merge_start) * 1000)
+
+    assert arr2.array == arr.array, True
+    assert arr1.array == arr.array, True
